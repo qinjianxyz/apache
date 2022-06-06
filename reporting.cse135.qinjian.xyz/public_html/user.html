@@ -2,6 +2,34 @@
 <html lang="en">
   <head>
 	<title>User Management</title>
+    <script>
+        function onFormSubmit() {
+            let data = readFormData();
+             
+        }
+
+        function insertRecord(data) {
+            let table = document.getElementById("userlist").getElementsByTagName('tbody')[0];
+            let newRow = table.insertRow(table.length);
+            let cell1 = newRow.insertCell(0);
+            cell1.innerHTML = data.username;
+            let cell2 = newRow.insertCell(1);
+            cell2.innerHTML = data.password;
+            let cell3 = newRow.insertCell(2);
+            cell3.innerHTML = data.admin ? 'admin' : 'user';
+            let cell4 = newRow.insertCell(3);
+            cell4.innerHTML = `<a>Edit</a>
+                               <a>Delete</a>`
+        }
+
+        function readFormData() {
+            let data = {};
+            data["username"] = document.getElementById("username").value;
+            data["password"] = document.getElementById("password").value;
+            data["admin"] = document.getElementById('admin').checked ? true : false;
+            return data;
+        }
+    </script>
   </head>
   <body>
 	<h1>User Management</h1>
@@ -10,6 +38,52 @@
     <h1>Back to DashBoard</h1>
     <a href="/api/dashboard">Back</a>
 
-    
+    <table>
+        <tr>
+            <td>
+                <form onsubmit="event.preventDefault(); onFormSubmit();" autocomplete="off">
+                    <div>
+                        <h3>Create User</h3><br>
+                        <label>username</label>
+                        <input type="text" name="username" id="username">
+                    </div>
+                    <div>
+                        <label>password</label>
+                        <input type="text" name="password" id="password">
+                    </div>
+                    <div>
+                        <input type="radio" id="admin" name="role" value="admin">
+                        <label for="admin">admin</label><br>
+                        <input type="radio" id="user" name="role" value="user">
+                        <label for="user">user</label><br>
+                    </div>
+                    <div>
+                        <input type="submit" value="Submit">
+                    </div>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>User Management</h3><br>
+                <table class="list" id="userlist">
+                    <thead>
+                        <tr>
+                            <th>+---- username ----+</th>
+                            <th>+---- password(hash) ----+</th>
+                            <th>+---- role ----+</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                
+            </td>
+        </tr>
+    </table>
+
+
   </body>
 </html>
