@@ -1,25 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-	<title>User Management</title>
+
+<head>
+    <title>User Management</title>
     <script>
-        function onFormSubmit() {
+        loadData();
+        async function onFormSubmit() {
             let data = readFormData();
-             
+            await fetch("/api/users", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                if (response.ok) {
+                    response.json().then(data => {
+                        console.log(data);
+                    });
+                } else {
+                    response.json().then(error => {
+                        console.log(error);
+                    });
+                }
+            });
+            clearData();
+            loadData();
         }
 
-        function insertRecord(data) {
-            let table = document.getElementById("userlist").getElementsByTagName('tbody')[0];
-            let newRow = table.insertRow(table.length);
-            let cell1 = newRow.insertCell(0);
-            cell1.innerHTML = data.username;
-            let cell2 = newRow.insertCell(1);
-            cell2.innerHTML = data.password;
-            let cell3 = newRow.insertCell(2);
-            cell3.innerHTML = data.admin ? 'admin' : 'user';
-            let cell4 = newRow.insertCell(3);
-            cell4.innerHTML = `<a>Edit</a>
-                               <a>Delete</a>`
+        async function del(username) {
+            let double_check = confirm("Are you sure you want to delete this user?");
+            if (double_check) {
+                await fetch("/api/users/" + username, {
+                    method: "DELETE"
+                }).then(response => {
+                    if (response.ok) {
+                        response.json().then(data => {
+                            console.log(data);
+                        });
+                    } else {
+                        response.json().then(error => {
+                            console.log(error);
+                        });
+                    }
+                });
+            }
+            loadData();
+        }
+
+        async function edit(username) {
+            let data = readFormData();
+            await fetch("/api/users/" + username, {
+                method: "PUT",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                if (response.ok) {
+                    response.json().then(data => {
+                        console.log(data);
+                    });
+                } else {
+                    response.json().then(error => {
+                        console.log(error);
+                    });
+                }
+            });
+            clearData();
+            loadData();
+        }
+
+        function loadData() {
+            fetch("/api/users").then(response => {
+                if (response.ok) {
+                    response.json().then(data => {
+                        console.log(data);
+                        let table = document.getElementById("userlist").getElementsByTagName('tbody')[0];
+                        table.innerHTML = "";
+                        for (i = 0; i < data.length; i++) {
+                            let newRow = table.insertRow(table.length);
+                            let cell1 = newRow.insertCell(0);
+                            cell1.innerHTML = data[i].username;
+                            let cell2 = newRow.insertCell(1);
+                            cell2.innerHTML = data[i]['_id'];
+                            let cell3 = newRow.insertCell(2);
+                            cell3.innerHTML = data[i].email;
+                            let cell4 = newRow.insertCell(3);
+                            cell4.innerHTML = data[i].admin ? 'admin' : 'user';
+                            let cell5 = newRow.insertCell(4);
+                            cell5.innerHTML =  `<button onclick=\"edit(\'${data[i].username}\')\">Edit</button>
+                                                <button onclick=\"del(\'${data[i].username}\')\">Delete</button>`
+                        }
+                    });
+                } else {
+                response.json().then(error => {
+                    console.log(error);
+                    });
+                }
+            });
         }
 
         function readFormData() {
@@ -27,16 +106,35 @@
             data["username"] = document.getElementById("username").value;
             data["password"] = document.getElementById("password").value;
             data["admin"] = document.getElementById('admin').checked ? true : false;
+            data["email"] = document.getElementById("email").value;
             return data;
         }
+
+        function clearData() {
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById('admin').checked = false;
+            document.getElementById('user').checked = false;
+            document.getElementById("email").value = "";
+        }
     </script>
-  </head>
-  <body>
-	<h1>User Management</h1>
+</head>
+
+<body>
+    <h1>User Management</h1>
 
     <!--Go Back to Dashboard -->
     <h1>Back to DashBoard</h1>
     <a href="/api/dashboard">Back</a>
+
+    <h3>Rules of Use</h3>
+    <ol>
+        <li>Only administrators can create, read, update, and delete users.</li>
+        <li>Administrators cannot downgrade their own permission. (admin cannot update their account to be users)</li>
+        <li>To create users, fill in the form and click create. Email must be valid.</li>
+        <li>To update users, fill in the form and click edit button next to the user.</li>
+        <li>To delete users, click delete button next to the user, a pop-up will ask for confirmation.</li>
+    </ol>
 
     <table>
         <tr>
@@ -52,13 +150,17 @@
                         <input type="text" name="password" id="password">
                     </div>
                     <div>
+                        <label>email</label>
+                        <input type="text" name="email" id="email">
+                    </div>
+                    <div>
                         <input type="radio" id="admin" name="role" value="admin">
                         <label for="admin">admin</label><br>
                         <input type="radio" id="user" name="role" value="user">
                         <label for="user">user</label><br>
                     </div>
                     <div>
-                        <input type="submit" value="Submit">
+                        <input type="submit" value="Create">
                     </div>
                 </form>
             </td>
@@ -70,7 +172,8 @@
                     <thead>
                         <tr>
                             <th>+---- username ----+</th>
-                            <th>+---- password(hash) ----+</th>
+                            <th>+---- id ----+</th>
+                            <th>+---- email ----+</th>
                             <th>+---- role ----+</th>
                             <th></th>
                         </tr>
@@ -79,11 +182,12 @@
 
                     </tbody>
                 </table>
-                
+
             </td>
         </tr>
     </table>
 
 
-  </body>
+</body>
+
 </html>

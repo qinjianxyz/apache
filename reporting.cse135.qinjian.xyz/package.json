@@ -20,6 +20,7 @@
     "nodemon": "^2.0.16",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
+    "passport-local-authenticate": "^1.2.0",
     "passport-local-mongoose": "^7.1.2"
   }
 }

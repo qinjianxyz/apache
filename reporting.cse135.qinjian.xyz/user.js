@@ -15,8 +15,12 @@ const Schema = mongoose.Schema;
 
 const User = new Schema({
   username: String,
-  password: String
+  hash: String,
+  salt: String,
+  email: String,
+  admin: Boolean
 });
+
 // Export Model
 User.plugin(passportLocalMongoose);
 

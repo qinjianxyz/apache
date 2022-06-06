@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>Visualization</title>
-    <script src="collector.js"></script>
+    <script src="/collector.js"></script>
     <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
 </head>
 
@@ -423,7 +423,9 @@
                         },
                         {
                             text: 'Other',
-                            values: [(idle_lengths.length - less10000 - less5000 - less7000) / idle_lengths.length],
+                            values: [(idle_lengths.length - less10000 - less5000 - less7000) / idle_lengths
+                                .length
+                            ],
                             backgroundColor: '#6FB07F'
                         }
                     ]
