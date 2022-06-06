@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html class="zg-html">
+
+<head>
+    <title>Database</title>
+    <script src="https://cdn.zinggrid.com/zinggrid.min.js"></script>
+    <script src="./collector.js"></script>
+</head>
+
+<style>
+    .zg-body {
+        padding: 20px;
+        background: #ffffff;
+        font-family: 'Work Sans', sans-serif;
+    }
+
+    zing-grid {
+        max-width: 700px;
+        margin: 0 auto;
+        font-family: 'Work Sans', sans-serif;
+        border: none;
+        font-size: 11px;
+        color: #212121;
+        border: 1px solid #ddd;
+        opacity: 1;
+    }
+
+    zing-grid.loading {
+        opacity: 0;
+        transition: opacity .3s ease-out;
+    }
+
+    zing-grid.loading * {
+        opacity: 0;
+    }
+
+    zg-caption {
+        background: #ffffff;
+        color: #222222;
+        padding: 0px 15px;
+        font-size: 18px;
+    }
+
+    zg-head {
+        letter-spacing: .5px;
+        padding-left: 1px;
+    }
+
+
+
+
+    .zg-body .user--avatar {
+        width: 20px;
+        margin-right: 7px;
+    }
+
+    .zg-body .recent {
+        color: #69B668;
+    }
+
+    .zg-body .unknown {
+        color: #ACAAAE;
+    }
+
+    zg-filter input {
+        margin-left: 7px;
+    }
+</style>
+
+<body class="zg-body">
+    <zing-grid id="statics-grid" data='' theme="default" caption="Static Data" pager page-size="10"
+        page-size-options="10,20,50,200,1000" pager-type="button-arrows" layout-controls="true">
+    </zing-grid>
+    <zing-grid id="performances-grid" data='' theme="default" caption="Performance Data" pager page-size="10"
+        page-size-options="10,20,50,200,1000" pager-type="button-arrows" layout-controls="true">
+    </zing-grid>
+    <zing-grid id="activities-grid" data='' theme="default" caption="Activity Data" pager page-size="10"
+        page-size-options="10,20,50,200,1000" pager-type="button-arrows" layout-controls="true">
+    </zing-grid>
+    <script>
+        const staticGridRef = document.querySelector('#statics-grid');
+        const performanceGridRef = document.querySelector('#performances-grid');
+        const activityGridRef = document.querySelector('#activities-grid');
+
+        staticGridRef.executeOnLoad(function () {
+            fetch(static_url)
+                .then(response => response.json())
+                .then(data => {
+                    staticGridRef.setAttribute('data', JSON.stringify(data));
+                })
+        });
+
+        performanceGridRef.executeOnLoad(function () {
+            fetch(performance_url)
+                .then(response => response.json())
+                .then(data => {
+                    performanceGridRef.setAttribute('data', JSON.stringify(data));
+                })
+        });
+
+        activityGridRef.executeOnLoad(function () {
+            fetch(activity_url)
+                .then(response => response.json())
+                .then(data => {
+                    activityGridRef.setAttribute('data', JSON.stringify(data));
+                })
+        });
+    </script>
+</body>
+
+</html>

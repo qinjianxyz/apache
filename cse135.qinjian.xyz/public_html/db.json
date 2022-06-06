@@ -1,0 +1,14 @@
+{
+    "activities": [
+        {
+            "id": 1,
+            "title": "activity-1",
+            "author": "JQ"
+        },
+        {
+            "id": 2,
+            "title": "activity-2",
+            "author": "JQ"
+        }
+    ]
+}

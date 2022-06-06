@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <title>CSE 135 HW Lives!</title>
+</head>
+
+<body>
+  <h1>CSE 135 HW1 Lives!</h1>
+  <h2>collector.cse135.qinjian.xyz</h2>
+  <h2><a href="http://cse135.qinjian.xyz" target="_blank">Main Page</a></h2>
+  <script>
+    document.write(`Live @ ${new Date()}`);
+  </script>
+
+  <div style="text-align: center;">
+    <div id='year'></div>
+    All rights reserved.
+  </div>
+  <script>
+    let d = new Date();
+    let currentYear = d.getFullYear();
+    let display = "Copyright &copy " + currentYear + ", Jian Qin";
+    document.getElementById('year').innerHTML = display;
+  </script>
+
+</body>
+
+</html>

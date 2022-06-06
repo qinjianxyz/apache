@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <title>CSE 135 Jian Qin</title>
+    <script src="./hw3/collector.js"></script>
+    <script>
+        window.onload = event => {
+            postStatic();
+            postPerformance();
+            postEnterInfo();
+            window.addEventListener('mousemove', event => {
+                postMouseMovement(event);
+            });
+            window.addEventListener('scroll', event => {
+                postMouseScrolling(event);
+            });
+            window.onclick = event => {
+                postMouseClick(event);
+            }
+            window.addEventListener('keypress', async (event) => {
+                data = {
+                    keyboard_activity: event.code,
+                    page_info: window.location.href,
+                    identifier: custom_cookies()
+                }
+                return await postInstance(activity_url, data);
+            })
+            let events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+            events.forEach(name => {
+                window.addEventListener(name, resetTimer, true);
+            });
+            resetTimer();
+        }
+
+        window.onunload = event => {
+            postLeaveInfo();
+        }
+    </script>
+    <script src="https://cdn.lr-in.com/LogRocket.min.js" crossorigin="anonymous"></script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-226861928-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-226861928-1');
+    </script>
+</head>
+
+<body>
+    <!--Header-->
+    <h1 style="color:brown;">CSE 135 Spring 2022</h1>
+    <h2 style="color: turquoise;">IP Address: 164.92.108.208</h2>
+    <h2><a href="https://reporting.cse135.qinjian.xyz" target="_blank">Reporting Page</a></h2>
+    <h2><a href="https://collector.cse135.qinjian.xyz" target="_blank">Collector Page</a></h2>
+    <h2>Team Members:</h2>
+    <h3><a href="https://qinjian.xyz" target="_blank">Jian Qin</a></h3>
+    <!--Homework 1-->
+    <h3>Homework 1</h3>
+    <ul>
+        <li><a href="hw1/hello.php">PHP</a></li>
+        <li><a href="hw1/report.html">Report</a></li>
+    </ul>
+    <hr>
+    <h3>Homework 2</h3>
+
+    <ul style="display:inline-block; width: 400px;">
+        <p>PHP - CGI</p>
+        <li><a href="cgi-bin/php-hello-html-world.php">Hello, PHP!</a></li>
+        <li><a href="cgi-bin/php-hello-json-world.php">Hello, PHP! (Json)</a></li>
+        <li><a href="cgi-bin/php-environment.php">Environment Variables</a></li>
+        <li><a href="cgi-bin/php-get-echo.php">GET Echo</a></li>
+        <li><a href="cgi-bin/php-post-echo.php">POST Echo</a></li>
+        <li><a href="cgi-bin/php-general-echo.php">General Echo</a></li>
+        <li><a href="php-cgiform.html">Sessioning</a></li>
+    </ul>
+
+    <ul style="display:inline-block; width: 400px;">
+        <p>Python - CGI</p>
+        <li><a href="cgi-bin/python-hello-world.py">Hello, Python!</a></li>
+        <li><a href="cgi-bin/python-hello-json-world.py">Hello, Python! (Json)</a></li>
+        <li><a href="cgi-bin/python-environment.py">Environment Variables</a></li>
+        <li><a href="cgi-bin/python-get-echo.py">GET Echo</a></li>
+        <li><a href="cgi-bin/python-post-echo.py">POST Echo</a></li>
+        <li><a href="cgi-bin/python-general-echo.py">General Echo</a></li>
+        <li><a href="python-cgiform.html">Sessioning</a></li>
+    </ul>
+
+    <ul style="display:inline-block; width: 400px;">
+        <p>Perl - CGI</p>
+        <li><a href="cgi-bin/perl-hello-html-world.pl">Hello, Perl!</a></li>
+        <li><a href="cgi-bin/perl-hello-json-world.pl">Hello, Perl! (Json)</a></li>
+        <li><a href="cgi-bin/perl-environment-manual.pl">Environment Variables (Manually)</a></li>
+        <li><a href="cgi-bin/perl-environment-cgi.pl">Environment Variables (CGI.pm)</a></li>
+        <li><a href="cgi-bin/perl-get-echo.pl">GET Echo</a></li>
+        <li><a href="cgi-bin/perl-post-echo.pl">POST Echo</a></li>
+        <li><a href="cgi-bin/perl-general-echo.pl">General Echo</a></li>
+        <li><a href="perl-cgiform.html">Sessioning</a></li>
+    </ul>
+
+    <ul style="display:inline-block; width: 400px;">
+        <p>C - CGI</p>
+        <li><a href="cgi-bin/c-hello-html-world.cgi">Hello, C!</a></li>
+        <li><a href="cgi-bin/c-hello-json-world.cgi">Hello, C! (Json)</a></li>
+        <li><a href="cgi-bin/c-environment.cgi">Environment Variables</a></li>
+        <li><a href="cgi-bin/c-get-echo.cgi">GET Echo</a></li>
+        <li><a href="cgi-bin/c-post-echo.cgi">POST Echo</a></li>
+        <li><a href="cgi-bin/c-general-echo.cgi">General Echo</a></li>
+        <li><a href="c-cgiform.html">Sessioning</a></li>
+    </ul>
+
+    <h3>Homework 3</h3>
+    <li><a href="./hw3/hellodataviz.html">Data Visualization</a></li>
+    <li><a href="./hw3/database.html">Database Grid</a></li>
+
+    <img src="./statics/Geisel.jpg" style="display:block; margin-left:auto; margin-right:auto; width:50%;" />
+    <noscript>
+        <img src="/api/noscript" />
+    </noscript>
+
+    <div style="text-align: center;">
+        <div id='year'></div>
+        All rights reserved.
+    </div>
+    <script>
+        let d = new Date();
+        let currentYear = d.getFullYear();
+        let display = "Copyright &copy " + currentYear + ", Jian Qin";
+        document.getElementById('year').innerHTML = display;
+    </script>
+
+</body>
+
+</html>

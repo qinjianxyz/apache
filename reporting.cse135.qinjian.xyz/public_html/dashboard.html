@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Visualization</title>
+    <script src="collector.js"></script>
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+</head>
+
+<style>
+    html,
+    body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .chart--container {
+        height: 100%;
+        width: 100%;
+        min-height: 150px;
+    }
+
+    #myChart1 {
+        width: 100%;
+        height: 100%;
+        min-height: 250px;
+    }
+
+    #myChart2 {
+        width: 100%;
+        height: 100%;
+        min-height: 250px;
+    }
+
+    #myChart3 {
+        width: 100%;
+        height: 100%;
+        min-height: 250px;
+    }
+
+    .zc-ref {
+        display: none;
+    }
+</style>
+
+<body>
+
+    <!--Go Back to Dashboard -->
+    <h1>Back to DashBoard</h1>
+    <a href="/api/dashboard">Back</a>
+
+    <!--Chart 1-->
+    <div id="myChart1" class="chart--container">
+        <a class="zc-ref" href="https://www.zingchart.com">Powered by ZingChart</a>
+    </div>
+    <script>
+        fetch(static_url)
+            .then(response => response.json())
+            .then(static_data => {
+                fetch(performance_url)
+                    .then(response => response.json())
+                    .then(performance_data => {
+                        fetch(activity_url)
+                            .then(response => response.json())
+                            .then(activity_data => {
+                                let min_val = new Date('May 14, 2022 00:00:00').getTime();
+                                let step = 3600000; // an hour
+                                min_val += step * 10;
+                                let static_calls = [];
+                                let performance_calls = [];
+                                let activity_calls = [];
+                                for (i = 0; i < 24; i++) {
+                                    static_calls.push(static_data.filter(data => {
+                                        let start = min_val + i * step;
+                                        let end = start + step;
+                                        var time = new Date(data["date"]).getTime();
+                                        return (start < time && time < end);
+                                    }).length);
+                                    performance_calls.push(performance_data.filter(data => {
+                                        let start = min_val + i * step;
+                                        let end = start + step;
+                                        var time = new Date(data["date"]).getTime();
+                                        return (start < time && time < end);
+                                    }).length);
+                                    activity_calls.push(activity_data.filter(data => {
+                                        let start = min_val + i * step;
+                                        let end = start + step;
+                                        var time = new Date(data["date"]).getTime();
+                                        return (start < time && time < end);
+                                    }).length);
+                                }
+
+                                const myConfig1 = {
+                                    "type": "line",
+                                    "utc": true,
+                                    "title": {
+                                        "text": "Event Listener Analytics",
+                                        "font-size": "24px",
+                                        "adjust-layout": true
+                                    },
+                                    "plotarea": {
+                                        "margin": "dynamic 45 60 dynamic",
+                                    },
+                                    "legend": {
+                                        "layout": "float",
+                                        "background-color": "none",
+                                        "border-width": 0,
+                                        "shadow": 0,
+                                        "align": "center",
+                                        "adjust-layout": true,
+                                        "toggle-action": "remove",
+                                        "item": {
+                                            "padding": 7,
+                                            "marginRight": 17,
+                                            "cursor": "hand"
+                                        }
+                                    },
+                                    "scale-x": {
+                                        "min-value": min_val,
+                                        "shadow": 0,
+                                        "step": 3600000,
+                                        "transform": {
+                                            "type": "date",
+                                            "all": "%D, %d %M<br />%h:%i %A",
+                                            "item": {
+                                                "visible": false
+                                            }
+                                        },
+                                        "label": {
+                                            "visible": false
+                                        },
+                                        "minor-ticks": 0
+                                    },
+                                    "scale-y": {
+                                        "line-color": "#f6f7f8",
+                                        "shadow": 0,
+                                        "guide": {
+                                            "line-style": "dashed"
+                                        },
+                                        "label": {
+                                            "text": "Event Listener Triggers",
+                                        },
+                                        "minor-ticks": 0,
+                                        "thousands-separator": ","
+                                    },
+                                    "crosshair-x": {
+                                        "line-color": "#efefef",
+                                        "plot-label": {
+                                            "border-radius": "5px",
+                                            "border-width": "1px",
+                                            "border-color": "#f6f7f8",
+                                            "padding": "10px",
+                                            "font-weight": "bold"
+                                        },
+                                        "scale-label": {
+                                            "font-color": "#000",
+                                            "background-color": "#f6f7f8",
+                                            "border-radius": "5px"
+                                        }
+                                    },
+                                    "tooltip": {
+                                        "visible": false
+                                    },
+                                    "plot": {
+                                        "highlight": true,
+                                        "tooltip-text": "%t views: %v<br>%k",
+                                        "shadow": 0,
+                                        "line-width": "2px",
+                                        "marker": {
+                                            "type": "circle",
+                                            "size": 3
+                                        },
+                                        "highlight-state": {
+                                            "line-width": 3
+                                        },
+                                        "animation": {
+                                            "effect": 1,
+                                            "sequence": 2,
+                                            "speed": 100,
+                                        }
+                                    },
+                                    "series": [{
+                                            "values": static_calls,
+                                            "text": "Static",
+                                            "line-color": "#007790",
+                                            "legend-item": {
+                                                "background-color": "#007790",
+                                                "borderRadius": 5,
+                                                "font-color": "white"
+                                            },
+                                            "legend-marker": {
+                                                "visible": false
+                                            },
+                                            "marker": {
+                                                "background-color": "#007790",
+                                                "border-width": 1,
+                                                "shadow": 0,
+                                                "border-color": "#69dbf1"
+                                            },
+                                            "highlight-marker": {
+                                                "size": 6,
+                                                "background-color": "#007790",
+                                            }
+                                        },
+                                        {
+                                            "values": performance_calls,
+                                            "text": "Performance",
+                                            "line-color": "#009872",
+                                            "legend-item": {
+                                                "background-color": "#009872",
+                                                "borderRadius": 5,
+                                                "font-color": "white"
+                                            },
+                                            "legend-marker": {
+                                                "visible": false
+                                            },
+                                            "marker": {
+                                                "background-color": "#009872",
+                                                "border-width": 1,
+                                                "shadow": 0,
+                                                "border-color": "#69f2d0"
+                                            },
+                                            "highlight-marker": {
+                                                "size": 6,
+                                                "background-color": "#009872",
+                                            }
+                                        },
+                                        {
+                                            "values": activity_calls,
+                                            "text": "Activity",
+                                            "line-color": "#da534d",
+                                            "legend-item": {
+                                                "background-color": "#da534d",
+                                                "borderRadius": 5,
+                                                "font-color": "white"
+                                            },
+                                            "legend-marker": {
+                                                "visible": false
+                                            },
+                                            "marker": {
+                                                "background-color": "#da534d",
+                                                "border-width": 1,
+                                                "shadow": 0,
+                                                "border-color": "#faa39f"
+                                            },
+                                            "highlight-marker": {
+                                                "size": 6,
+                                                "background-color": "#da534d",
+                                            }
+                                        }
+                                    ]
+                                };
+
+                                zingchart.render({
+                                    id: 'myChart1',
+                                    data: myConfig1,
+                                    height: '100%',
+                                    width: '100%'
+                                });
+                            })
+                    })
+            });
+    </script>
+
+    <!--Chart 2-->
+    <div id="myChart2" class="chart--container">
+        <a class="zc-ref" href="https://www.zingchart.com">Powered by ZingChart</a>
+    </div>
+    <script>
+        window.addEventListener('load', function () {
+            fetch(static_url)
+                .then(response => response.json())
+                .then(statics => {
+                    let totalLength = statics.length;
+                    const JavaScriptAllow = statics.reduce(
+                        (previousValue, currentValue) => currentValue["allow_js"] ? previousValue + 1 :
+                        previousValue, 0);
+                    const ImagesAllow = statics.reduce(
+                        (previousValue, currentValue) => currentValue["allow_imgs"] ? previousValue +
+                        1 : previousValue, 0);
+                    const CssAllow = statics.reduce(
+                        (previousValue, currentValue) => currentValue["allow_css"] ? previousValue + 1 :
+                        previousValue, 0);
+
+                    const myConfig2 = {
+                        type: 'bar',
+                        title: {
+                            text: 'Client-side Loading Permission',
+                            fontSize: 24,
+                            color: '#5d7d9a'
+                        },
+                        legend: {
+                            draggable: true,
+                        },
+                        scaleX: {
+                            label: {
+                                text: 'Client Permission'
+                            },
+                            labels: ['Allow', 'Not Allow']
+                        },
+                        scaleY: {
+                            label: {
+                                text: 'Permission'
+                            }
+                        },
+                        plot: {
+                            animation: {
+                                effect: 'ANIMATION_EXPAND_BOTTOM',
+                                method: 'ANIMATION_STRONG_EASE_OUT',
+                                sequence: 'ANIMATION_BY_NODE',
+                                speed: 275,
+                            }
+                        },
+                        series: [{
+                                values: [JavaScriptAllow, totalLength - JavaScriptAllow],
+                                text: 'JavaScript',
+                                backgroundColor: '#4d80a6'
+                            },
+                            {
+                                values: [ImagesAllow, totalLength - ImagesAllow],
+                                text: 'Images',
+                                backgroundColor: '#70cfeb'
+                            },
+                            {
+                                values: [CssAllow, totalLength - CssAllow],
+                                text: 'CSS',
+                                backgroundColor: '#8ee9de'
+                            }
+                        ],
+                    };
+
+                    zingchart.render({
+                        id: 'myChart2',
+                        data: myConfig2,
+                        height: '100%',
+                        width: '100%'
+                    });
+                });
+        })
+    </script>
+
+    <!--Chart 3-->
+    <div id='myChart3'><a class="zc-ref" href="https://www.zingchart.com/">Charts by ZingChart</a></div>
+    <script>
+        fetch(activity_url)
+            .then(response => response.json())
+            .then(data => {
+                let total_idle = data.filter(d => d["idle"] != null);
+                let idle_lengths = total_idle.map(d => d["idle"]["break_length"])
+                let less5000 = idle_lengths.filter(d => d < 5000).length;
+                let less7000 = idle_lengths.filter(d => d < 7000 && d > 5000).length;
+                let less10000 = idle_lengths.filter(d => d < 10000 && d > 7000).length;
+
+                const myConfig3 = {
+                    type: "pie",
+                    plot: {
+                        borderColor: "#2B313B",
+                        borderWidth: 5,
+                        // slice: 90,
+                        valueBox: {
+                            placement: 'out',
+                            text: '%t\n%npv%',
+                            fontFamily: "Open Sans"
+                        },
+                        tooltip: {
+                            fontSize: '18',
+                            fontFamily: "Open Sans",
+                            padding: "5 10",
+                            text: "%npv%"
+                        },
+                        animation: {
+                            effect: 2,
+                            method: 5,
+                            speed: 900,
+                            sequence: 1,
+                            delay: 3000
+                        }
+                    },
+                    source: {
+                        text: 'gs.statcounter.com',
+                        fontColor: "#8e99a9",
+                        fontFamily: "Open Sans"
+                    },
+                    title: {
+                        fontColor: "#8e99a9",
+                        text: 'Idle Time Analytics',
+                        align: "left",
+                        offsetX: 10,
+                        fontFamily: "Open Sans",
+                        fontSize: 25
+                    },
+                    subtitle: {
+                        offsetX: 10,
+                        offsetY: 10,
+                        fontColor: "#8e99a9",
+                        fontFamily: "Open Sans",
+                        fontSize: "16",
+                        text: 'May 2016',
+                        align: "left"
+                    },
+                    plotarea: {
+                        margin: "20 0 0 0"
+                    },
+                    series: [{
+                            values: [less5000 / idle_lengths.length],
+                            text: "Less than 5000ms",
+                            backgroundColor: '#50ADF5',
+                        },
+                        {
+                            values: [less7000 / idle_lengths.length],
+                            text: "Less than 7000ms",
+                            backgroundColor: '#FF7965',
+                            detached: true
+                        },
+                        {
+                            values: [less10000 / idle_lengths.length],
+                            text: 'Less than 10000ms',
+                            backgroundColor: '#FFCB45',
+                            detached: true
+                        },
+                        {
+                            text: 'Other',
+                            values: [(idle_lengths.length - less10000 - less5000 - less7000) / idle_lengths.length],
+                            backgroundColor: '#6FB07F'
+                        }
+                    ]
+                };
+
+                zingchart.render({
+                    id: 'myChart3',
+                    data: myConfig3,
+                    height: '100%',
+                    width: '100%'
+                });
+            })
+    </script>
+
+
+</body>
+
+</html>
