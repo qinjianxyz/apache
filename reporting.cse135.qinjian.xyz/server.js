@@ -45,43 +45,50 @@ passport.deserializeUser(User.deserializeUser());
 
 
 let prefix = "/api";
+let path = ""
 
 // Route to Homepage
-app.get(prefix + '/', (req, res) => {
+app.get(path + '/', (req, res) => {
   res.sendFile(__dirname + '/public_html/index.html');
 });
 
 
 // Route to Login Page
-app.get(prefix + '/login', (req, res) => {
+app.get(path + '/login', (req, res) => {
   res.sendFile(__dirname + '/public_html/login.html');
 });
 
 // Route to Dashboard
-app.get(prefix + '/dashboard', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), (req, res) => {
+app.get(path + '/dashboard', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), (req, res) => {
   let isAdmin = req.user['_doc']['admin'] == true;
 
   if (isAdmin) {
-    res.send(`<h1>Hello ${req.user.username}</h1><br>
-              <a href="${prefix}/logout">Log Out</a><br>
-              <a href="${prefix}/secret">Dashboard</a><br>
-              <a href="${prefix}/user">User Management</a><br>`);
+    res.send(`<p style="text-align:center;">
+                <h1>Main Menu<h1>
+                <h1>Hello ${req.user.username}</h1><br>
+                <a href="${prefix}/logout">Log Out</a><br>
+                <a href="${prefix}/secret">Dashboard</a><br>
+                <a href="${prefix}/user">User Management</a><br>
+              </p>`);
   } else {
-    res.send(`<h1>Hello ${req.user.username}</h1><br>
-              <a href="${prefix}/logout">Log Out</a><br>
-              <a href="${prefix}/secret">Dashboard</a>`);
+    res.send(`<p>
+                <h1>Main Menu<h1>
+                <h1>Hello ${req.user.username}</h1><br>
+                <a href="${prefix}/logout">Log Out</a><br>
+                <a href="${prefix}/secret">Dashboard</a>
+              </p>`);
   }
 
 
 });
 
 // Route to Secret Page
-app.get(prefix + '/secret', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), (req, res) => {
+app.get(path + '/secret', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), (req, res) => {
   res.sendFile(__dirname + '/public_html/dashboard.html');
 });
 
 // Route to User Management
-app.get(prefix + '/user', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), (req, res) => {
+app.get(path + '/user', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), (req, res) => {
   if (req.user.admin) {
     res.sendFile(__dirname + '/public_html/user.html');
   } else {
@@ -90,7 +97,7 @@ app.get(prefix + '/user', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), 
   
 });
 
-app.get(prefix + '/users', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), async(req, res) => {
+app.get(path + '/users', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), async(req, res) => {
     try {
       const users = await User.find();
       res.send(users);
@@ -101,7 +108,7 @@ app.get(prefix + '/users', connectEnsureLogin.ensureLoggedIn(prefix + '/login'),
 
 
 // Add New User (local)
-app.post(prefix + '/users', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), async (req, res) => {
+app.post(path + '/users', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), async (req, res) => {
   let loggedInUser = req.user;
   let body = req.body;
 
@@ -137,7 +144,7 @@ app.post(prefix + '/users', connectEnsureLogin.ensureLoggedIn(prefix + '/login')
 });
 
 // delete user
-app.delete(prefix + '/users/:name', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), async (req, res) => {
+app.delete(path + '/users/:name', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), async (req, res) => {
   let loggedInUser = req.user;
   let name = req.params.name;
 
@@ -159,7 +166,7 @@ app.delete(prefix + '/users/:name', connectEnsureLogin.ensureLoggedIn(prefix + '
   }
 });
 
-app.put(prefix + '/users/:name', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), async (req, res) => {
+app.put(path + '/users/:name', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), async (req, res) => {
   let loggedInUser = req.user;
   let name = req.params.name;
   let body = req.body;
@@ -218,14 +225,14 @@ app.put(prefix + '/users/:name', connectEnsureLogin.ensureLoggedIn(prefix + '/lo
 });
 
 // Route to Log out
-app.get(prefix + '/logout', function (req, res) {
+app.get(path + '/logout', function (req, res) {
   req.logout(() => {
     res.redirect(prefix + '/login');
   });
 });
 
 // Post Route: /login
-app.post(prefix + '/login', passport.authenticate('local', {
+app.post(path + '/login', passport.authenticate('local', {
   failureRedirect: prefix + '/login'
 }), function (req, res) {
   console.log(req.user)
