@@ -45,7 +45,7 @@ passport.deserializeUser(User.deserializeUser());
 
 
 let prefix = "/api";
-let path = ""
+let path = "/api"
 
 // Route to Homepage
 app.get(path + '/', (req, res) => {
@@ -63,23 +63,36 @@ app.get(path + '/dashboard', connectEnsureLogin.ensureLoggedIn(prefix + '/login'
   let isAdmin = req.user['_doc']['admin'] == true;
 
   if (isAdmin) {
-    res.send(`<p style="text-align:center;">
+    res.send(`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+		              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+              <div class="container">
                 <h1>Main Menu<h1>
-                <h1>Hello ${req.user.username}</h1><br>
+                <h1>Hello ${req.user.username}!</h1><br>
                 <a href="${prefix}/logout">Log Out</a><br>
                 <a href="${prefix}/secret">Dashboard</a><br>
                 <a href="${prefix}/user">User Management</a><br>
-              </p>`);
+              </div>`);
   } else {
-    res.send(`<p>
+    res.send(`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+		              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+              <div class="container">
                 <h1>Main Menu<h1>
-                <h1>Hello ${req.user.username}</h1><br>
+                <h1>Hello ${req.user.username}!</h1><br>
                 <a href="${prefix}/logout">Log Out</a><br>
-                <a href="${prefix}/secret">Dashboard</a>
-              </p>`);
+                <a href="${prefix}/secret">Dashboard</a><br>
+              </div>`);
   }
 
 
+});
+
+app.get(path + '/report/:id', connectEnsureLogin.ensureLoggedIn(prefix + '/login'), (req, res) => {
+  let id = req.params.id;
+  if (id > 1 || id < 1) {
+    res.send("Invalid ID");
+  } else {
+    res.sendFile(__dirname + `/public_html/report/report${id}.html`);
+  }
 });
 
 // Route to Secret Page
