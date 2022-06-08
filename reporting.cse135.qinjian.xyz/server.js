@@ -73,6 +73,7 @@ app.get(path + '/dashboard', connectEnsureLogin.ensureLoggedIn(prefix + '/login'
                 <a href="${prefix}/logout">Log Out</a><br>
                 <a href="${prefix}/secret">Dashboard</a><br>
                 <a href="${prefix}/user">User Management</a><br>
+                <img src="/Analytics.jpeg" width="1200px">
               </div>`);
   } else {
     res.send(`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
@@ -82,6 +83,7 @@ app.get(path + '/dashboard', connectEnsureLogin.ensureLoggedIn(prefix + '/login'
                 <h1>Hello ${req.user.username}!</h1><br>
                 <a href="${prefix}/logout">Log Out</a><br>
                 <a href="${prefix}/secret">Dashboard</a><br>
+                <img src="/Analytics.jpeg" >
               </div>`);
   }
 
