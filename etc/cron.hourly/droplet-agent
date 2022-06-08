@@ -1,0 +1,2 @@
+#!/bin/sh
+/bin/bash /opt/digitalocean/droplet-agent/scripts/update.sh >/var/log/droplet-agent.update.log 2>&1

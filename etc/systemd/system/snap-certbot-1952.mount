@@ -1,0 +1,14 @@
+[Unit]
+Description=Mount unit for certbot, revision 1952
+Before=snapd.service
+After=zfs-mount.service
+
+[Mount]
+What=/var/lib/snapd/snaps/certbot_1952.snap
+Where=/snap/certbot/1952
+Type=squashfs
+Options=nodev,ro,x-gdu.hide,x-gvfs-hide
+LazyUnmount=yes
+
+[Install]
+WantedBy=multi-user.target

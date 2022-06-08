@@ -1,0 +1,25 @@
+# MySQL systemd service file
+
+[Unit]
+Description=MySQL Community Server
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=notify
+User=mysql
+Group=mysql
+PIDFile=/run/mysqld/mysqld.pid
+PermissionsStartOnly=true
+ExecStartPre=/usr/share/mysql/mysql-systemd-start pre
+ExecStart=/usr/sbin/mysqld
+TimeoutSec=infinity
+Restart=on-failure
+RuntimeDirectory=mysqld
+RuntimeDirectoryMode=755
+LimitNOFILE=10000
+
+# Set enviroment variable MYSQLD_PARENT_PID. This is required for restart.
+Environment=MYSQLD_PARENT_PID=1

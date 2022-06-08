@@ -1,0 +1,18 @@
+# Only try to automount DO block volumes.
+SUBSYSTEM!="block", GOTO="do_automount_end"
+ENV{ID_VENDOR}!="DO", GOTO="do_automount_end"
+ENV{ID_MODEL}!="Volume", GOTO="do_automount_end"
+
+# Only automount on "add" or "change" actions.
+ACTION!="add|change", GOTO="do_automount_end"
+# Only try to automount filesystems we know about.
+ENV{ID_FS_TYPE}!="ext4|xfs", GOTO="do_automount_end"
+
+# Create a temporary location for the first-mount script.
+IMPORT{program}="/bin/sh -c 'echo TMP_SCRIPT=$$(mktemp -t .do-first-mount-XXXXXXXXX.sh)'"
+# Handle temporary script location creation failure.
+ENV{TMP_SCRIPT}=="", GOTO="do_automount_end"
+
+RUN{program}+="/var/lib/cloud/scripts/per-instance/systemd_automount.sh %k %E{TMP_SCRIPT} '%E{ID_SERIAL}' '%E{ID_FS_TYPE}' '%E{ID_SERIAL_SHORT}' '%E{ID_FS_UUID}' '%E{ID_FS_LABEL}'"
+
+LABEL="do_automount_end"

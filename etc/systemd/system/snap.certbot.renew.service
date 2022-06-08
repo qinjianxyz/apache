@@ -1,0 +1,16 @@
+[Unit]
+# Auto-generated, DO NOT EDIT
+Description=Service for snap application certbot.renew
+Requires=snap-certbot-2035.mount
+Wants=network.target
+After=snap-certbot-2035.mount network.target snapd.apparmor.service
+X-Snappy=yes
+
+[Service]
+EnvironmentFile=-/etc/environment
+ExecStart=/usr/bin/snap run --timer="00:00~24:00/2" certbot.renew
+SyslogIdentifier=certbot.renew
+Restart=no
+WorkingDirectory=/var/snap/certbot/2035
+TimeoutStopSec=30
+Type=oneshot

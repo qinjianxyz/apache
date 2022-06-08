@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh fwupd metadata regularly
+ConditionVirtualization=!container
+
+[Timer]
+OnCalendar=*-*-* 6,18:00
+RandomizedDelaySec=12h
+Persistent=true
+
+[Install]
+WantedBy=timers.target
