@@ -45,7 +45,9 @@ passport.deserializeUser(User.deserializeUser());
 
 
 let prefix = "/api";
-let path = "/api"
+let path = ""
+// local path = "/api"
+// apache path = ""
 
 // Route to Homepage
 app.get(path + '/', (req, res) => {
