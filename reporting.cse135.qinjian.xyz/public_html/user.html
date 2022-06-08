@@ -8,6 +8,12 @@
     <script>
         loadData();
         async function onFormSubmit() {
+
+            let confirmation = confirm("Are you sure you want to create?");
+            if (!confirmation) {
+                return;
+            }
+
             let data = readFormData();
             await fetch("/api/users", {
                 method: "POST",
@@ -51,6 +57,11 @@
         }
 
         async function edit(username) {
+            const confirmation = confirm("Are you sure you want to edit this user?");
+            if (!confirmation) {
+                return;
+            }
+
             let data = readFormData();
             await fetch("/api/users/" + username, {
                 method: "PUT",
