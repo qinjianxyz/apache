@@ -49,61 +49,61 @@
     }
 
     .zg-body {
-    padding: 20px;
-    background: #ffffff;
-    font-family: 'Work Sans', sans-serif;
+        padding: 20px;
+        background: #ffffff;
+        font-family: 'Work Sans', sans-serif;
     }
 
     zing-grid {
-    max-width: 700px;
-    margin: 0 auto;
-    font-family: 'Work Sans', sans-serif;
-    border: none;
-    font-size: 11px;
-    color: #212121;
-    border: 1px solid #ddd;
-    opacity: 1;
+        max-width: 700px;
+        margin: 0 auto;
+        font-family: 'Work Sans', sans-serif;
+        border: none;
+        font-size: 11px;
+        color: #212121;
+        border: 1px solid #ddd;
+        opacity: 1;
     }
 
     zing-grid.loading {
-    opacity: 0;
-    transition: opacity .3s ease-out;
+        opacity: 0;
+        transition: opacity .3s ease-out;
     }
 
     zing-grid.loading * {
-    opacity: 0;
+        opacity: 0;
     }
 
     zg-caption {
-    background: #ffffff;
-    color: #222222;
-    padding: 0px 15px;
-    font-size: 18px;
+        background: #ffffff;
+        color: #222222;
+        padding: 0px 15px;
+        font-size: 18px;
     }
 
     zg-head {
-    letter-spacing: .5px;
-    padding-left: 1px;
+        letter-spacing: .5px;
+        padding-left: 1px;
     }
 
 
 
 
     .zg-body .user--avatar {
-    width: 20px;
-    margin-right: 7px;
+        width: 20px;
+        margin-right: 7px;
     }
 
     .zg-body .recent {
-    color: #69B668;
+        color: #69B668;
     }
 
     .zg-body .unknown {
-    color: #ACAAAE;
+        color: #ACAAAE;
     }
 
     zg-filter input {
-    margin-left: 7px;
+        margin-left: 7px;
     }
 </style>
 
@@ -114,14 +114,100 @@
         <h1>Back to Menu</h1>
         <a href="/api/dashboard">Back</a>
     </div>
-    
+
+    <!--Chart 2-->
+    <div style="height: 50px;"></div>
+    <div id="myChart2" class="chart--container container w-50 h-50">
+        <a href="/api/report/1">Static Data Report (For Grading)</a>
+        <a class="zc-ref" href="https://www.zingchart.com">Powered by ZingChart</a>
+    </div>
+    <script>
+        window.addEventListener('load', function () {
+            fetch(static_url)
+                .then(response => response.json())
+                .then(statics => {
+                    let totalLength = statics.length;
+                    const JavaScriptAllow = statics.reduce(
+                        (previousValue, currentValue) => currentValue["allow_js"] ? previousValue + 1 :
+                        previousValue, 0);
+                    const ImagesAllow = statics.reduce(
+                        (previousValue, currentValue) => currentValue["allow_imgs"] ? previousValue +
+                        1 : previousValue, 0);
+                    const CssAllow = statics.reduce(
+                        (previousValue, currentValue) => currentValue["allow_css"] ? previousValue + 1 :
+                        previousValue, 0);
+                    const cookieAllow = statics.reduce(
+                        (previousValue, currentValue) => currentValue["accept_cookies"] ?
+                        previousValue + 1 :
+                        previousValue, 0);
+
+                    const myConfig2 = {
+                        type: 'bar',
+                        title: {
+                            text: 'Client-side Loading Permission',
+                            fontSize: 24,
+                            color: '#5d7d9a'
+                        },
+                        legend: {
+                            draggable: true,
+                        },
+                        scaleX: {
+                            label: {
+                                text: 'Client Permission'
+                            },
+                            labels: ['Allow', 'Not Allow']
+                        },
+                        scaleY: {
+                            label: {
+                                text: 'Permission'
+                            }
+                        },
+                        plot: {
+                            animation: {
+                                effect: 'ANIMATION_EXPAND_BOTTOM',
+                                method: 'ANIMATION_STRONG_EASE_OUT',
+                                sequence: 'ANIMATION_BY_NODE',
+                                speed: 275,
+                            }
+                        },
+                        series: [{
+                                values: [JavaScriptAllow, totalLength - JavaScriptAllow],
+                                text: 'JavaScript',
+                                backgroundColor: '#4d80a6'
+                            },
+                            {
+                                values: [ImagesAllow, totalLength - ImagesAllow],
+                                text: 'Images',
+                                backgroundColor: '#70cfeb'
+                            },
+                            {
+                                values: [CssAllow, totalLength - CssAllow],
+                                text: 'CSS',
+                                backgroundColor: '#8ee9de'
+                            },
+                            {
+                                values: [cookieAllow, totalLength - cookieAllow],
+                                text: 'Cookie',
+                                backgroundColor: '#8ee9de'
+                            }
+                        ],
+                    };
+
+                    zingchart.render({
+                        id: 'myChart2',
+                        data: myConfig2,
+                        height: '100%',
+                        width: '100%'
+                    });
+                });
+        })
+    </script>
 
     <!--Chart 1-->
     <div style="height: 50px;"></div>
     <div id="myChart1" class="chart--container container w-50 h-50">
-        <a href="/api/report/1">Static Data Report (For Grading)</a>
         <a class="zc-ref" href="https://www.zingchart.com">Powered by ZingChart</a>
-        
+
     </div>
     <script>
         fetch(static_url)
@@ -332,84 +418,6 @@
             });
     </script>
 
-    <!--Chart 2-->
-    <div style="height: 50px;"></div>
-    <div id="myChart2" class="chart--container container w-50 h-50">
-        <a class="zc-ref" href="https://www.zingchart.com">Powered by ZingChart</a>
-    </div>
-    <script>
-        window.addEventListener('load', function () {
-            fetch(static_url)
-                .then(response => response.json())
-                .then(statics => {
-                    let totalLength = statics.length;
-                    const JavaScriptAllow = statics.reduce(
-                        (previousValue, currentValue) => currentValue["allow_js"] ? previousValue + 1 :
-                        previousValue, 0);
-                    const ImagesAllow = statics.reduce(
-                        (previousValue, currentValue) => currentValue["allow_imgs"] ? previousValue +
-                        1 : previousValue, 0);
-                    const CssAllow = statics.reduce(
-                        (previousValue, currentValue) => currentValue["allow_css"] ? previousValue + 1 :
-                        previousValue, 0);
-
-                    const myConfig2 = {
-                        type: 'bar',
-                        title: {
-                            text: 'Client-side Loading Permission',
-                            fontSize: 24,
-                            color: '#5d7d9a'
-                        },
-                        legend: {
-                            draggable: true,
-                        },
-                        scaleX: {
-                            label: {
-                                text: 'Client Permission'
-                            },
-                            labels: ['Allow', 'Not Allow']
-                        },
-                        scaleY: {
-                            label: {
-                                text: 'Permission'
-                            }
-                        },
-                        plot: {
-                            animation: {
-                                effect: 'ANIMATION_EXPAND_BOTTOM',
-                                method: 'ANIMATION_STRONG_EASE_OUT',
-                                sequence: 'ANIMATION_BY_NODE',
-                                speed: 275,
-                            }
-                        },
-                        series: [{
-                                values: [JavaScriptAllow, totalLength - JavaScriptAllow],
-                                text: 'JavaScript',
-                                backgroundColor: '#4d80a6'
-                            },
-                            {
-                                values: [ImagesAllow, totalLength - ImagesAllow],
-                                text: 'Images',
-                                backgroundColor: '#70cfeb'
-                            },
-                            {
-                                values: [CssAllow, totalLength - CssAllow],
-                                text: 'CSS',
-                                backgroundColor: '#8ee9de'
-                            }
-                        ],
-                    };
-
-                    zingchart.render({
-                        id: 'myChart2',
-                        data: myConfig2,
-                        height: '100%',
-                        width: '100%'
-                    });
-                });
-        })
-    </script>
-
     <!--Chart 3-->
     <div style="height: 50px;"></div>
     <div id='myChart3' class="container w-50 h-50">
@@ -422,9 +430,12 @@
             .then(data => {
                 let total_idle = data.filter(d => d["idle"] != null);
                 let idle_lengths = total_idle.map(d => d["idle"]["break_length"])
-                let less5000 = idle_lengths.filter(d => d < 5000).length;
+                let less3000 = idle_lengths.filter(d => d < 3000).length;
+                let less5000 = idle_lengths.filter(d => d < 5000 && d > 3000).length;
                 let less7000 = idle_lengths.filter(d => d < 7000 && d > 5000).length;
                 let less10000 = idle_lengths.filter(d => d < 10000 && d > 7000).length;
+                let less20000 = idle_lengths.filter(d => d < 20000 && d > 10000).length;
+                let less50000 = idle_lengths.filter(d => d < 50000 && d > 20000).length;
 
                 const myConfig3 = {
                     type: "pie",
@@ -477,6 +488,11 @@
                         margin: "20 0 0 0"
                     },
                     series: [{
+                            values: [less3000 / idle_lengths.length],
+                            text: "Less than 3000ms",
+                            backgroundColor: '#50ADF5',
+                        },
+                        {
                             values: [less5000 / idle_lengths.length],
                             text: "Less than 5000ms",
                             backgroundColor: '#50ADF5',
@@ -490,6 +506,18 @@
                         {
                             values: [less10000 / idle_lengths.length],
                             text: 'Less than 10000ms',
+                            backgroundColor: '#FFCB45',
+                            detached: true
+                        },
+                        {
+                            values: [less20000 / idle_lengths.length],
+                            text: 'Less than 20000ms',
+                            backgroundColor: '#FFCB45',
+                            detached: true
+                        },
+                        {
+                            values: [less50000 / idle_lengths.length],
+                            text: 'Less than 50000ms',
                             backgroundColor: '#FFCB45',
                             detached: true
                         },
